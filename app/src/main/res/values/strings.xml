@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">ProjectBrain</string>
+    <string name="e_mail">e-mail:</string>
+    <string name="applogo">AppLogo</string>
+    <string name="password">password:</string>
+    <string name="login">login</string>
+    <string name="register">register</string>
+    <string name="forgot_password">forgot password?</string>
 </resources>
