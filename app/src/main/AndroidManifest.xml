@@ -9,12 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".Register"
-            android:theme="@style/AppThemeNoActionBar">
-
-        </activity>
+            android:theme="@style/AppThemeNoActionBar"></activity>
         <activity
             android:name=".LogIn"
             android:theme="@style/AppThemeNoActionBar">
@@ -26,9 +23,9 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:theme="@style/AppThemeNoActionBar">
-
-        </activity>
+            android:icon="@drawable/bar_logo"
+            android:label=" "
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>
