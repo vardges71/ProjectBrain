@@ -10,8 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".Profile"
+            android:label=" "
+            ></activity>
+        <activity
             android:name=".Register"
-            android:theme="@style/AppThemeNoActionBar"></activity>
+            android:theme="@style/AppThemeNoActionBar" />
         <activity
             android:name=".LogIn"
             android:theme="@style/AppThemeNoActionBar">
@@ -23,9 +27,8 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:icon="@drawable/bar_logo"
             android:label=" "
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

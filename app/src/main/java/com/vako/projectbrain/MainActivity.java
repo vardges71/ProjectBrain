@@ -24,6 +24,11 @@ public class MainActivity extends AppCompatActivity {
 
         MenuInflater inflater = getMenuInflater();
         ((MenuInflater) inflater).inflate(R.menu.main_menu, menu);
+
+        MenuItem mainButton = menu.findItem(R.id.mainActtivity);
+        mainButton.setVisible(false);
+        MenuItem editButton = menu.findItem(R.id.editUser);
+        editButton.setVisible(false);
         return true;
     }
 
@@ -32,8 +37,14 @@ public class MainActivity extends AppCompatActivity {
 
         // Handle item selection
         switch (item.getItemId()) {
+
+            case R.id.mainActtivity:
+                Intent toMain = new Intent(this, MainActivity.class);
+                startActivity(toMain);
+                return true;
             case R.id.userMenu:
-                // do something
+                Intent toProfile = new Intent(this, Profile.class);
+                startActivity(toProfile);
                 return true;
             case R.id.logout_icon:
                 logOut();

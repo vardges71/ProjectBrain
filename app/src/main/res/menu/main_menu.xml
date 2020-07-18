@@ -3,23 +3,39 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/userMenu"
-        android:icon="@drawable/ic_perm_identity_24px"
-        android:orderInCategory="102"
-        app:showAsAction="always"
-        android:title="user" />
-    <item
-        android:id="@+id/logout_icon"
-        android:icon="@drawable/ic_logoutbold"
-        android:orderInCategory="103"
-        app:showAsAction="always"
-        android:title="LogOut"
-        />
-    <item
         android:id="@+id/search_icon"
         android:icon="@drawable/ic_search_24px"
-        android:title="Search"
+        android:title="@string/search_icon"
         android:orderInCategory="101"
         app:showAsAction="always"
         app:actionViewClass="android.widget.SearchView" />
+
+    <item
+        android:id="@+id/mainActtivity"
+        android:icon="@drawable/ic_home_thin"
+        android:orderInCategory="102"
+        app:showAsAction="always"
+        android:title="main" />
+
+    <item
+        android:id="@+id/userMenu"
+        android:icon="@drawable/ic_person_thin"
+        android:orderInCategory="103"
+        app:showAsAction="always"
+        android:title="user" />
+
+    <item
+        android:id="@+id/editUser"
+        android:icon="@drawable/ic_edit_text"
+        android:orderInCategory="104"
+        app:showAsAction="always"
+        android:title="editUser" />
+
+    <item
+        android:id="@+id/logout_icon"
+        android:icon="@drawable/ic_logout"
+        android:orderInCategory="104"
+        app:showAsAction="always"
+        android:title="LogOut"
+        />
 </menu>

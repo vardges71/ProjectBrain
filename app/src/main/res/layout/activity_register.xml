@@ -106,7 +106,7 @@
             android:background="@drawable/my_button_bg"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="18sp"
+            android:textSize="15sp"
             android:text="register"/>
 
         <Button
@@ -120,7 +120,7 @@
             android:background="@drawable/my_button_bg"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="18sp"
+            android:textSize="15sp"
             android:text="cancel"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
