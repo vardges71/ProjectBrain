@@ -28,6 +28,14 @@ public class User {
         this.userEmail = email;
     }
 
+    public User(String userName, String firstName, String lastName, String location) {
+
+        this.userName = userName;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.location = location;
+    }
+
     public String getUserName() { return userName; }
     public void setUserName(String userName) { this.userName = userName; }
 
