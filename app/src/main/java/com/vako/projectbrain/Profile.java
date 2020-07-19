@@ -30,14 +30,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class Profile extends AppCompatActivity implements View.OnClickListener, ValueEventListener, ChildEventListener {
+public class Profile extends AppCompatActivity implements View.OnClickListener {
 
     User userClass;
 
-//    FirebaseAuth mAuth;
-
 //    FirebaseDatabase database = FirebaseDatabase.getInstance();
 //    DatabaseReference myRef = database.getReference("users");
+    FirebaseAuth mAuth;
     DatabaseReference myRef;
 
     private static final String TAG = "ProfileActivity";
@@ -48,8 +47,6 @@ public class Profile extends AppCompatActivity implements View.OnClickListener, 
 
     private String id, email, userName, firstName, lastName, location;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,15 +54,16 @@ public class Profile extends AppCompatActivity implements View.OnClickListener, 
 
         initialize();
 
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
         if (mAuth.getCurrentUser() != null) {
 
             id = mAuth.getUid();
             email = mAuth.getCurrentUser().getEmail();
             emailField.setText("email:" + "\t" + email);
-
         }
+
+        myRef = FirebaseDatabase.getInstance().getReference("users");
     }
 
     private void initialize() {
@@ -169,7 +167,6 @@ public class Profile extends AppCompatActivity implements View.OnClickListener, 
 
     private void userSave(View view) {
 
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         String userID = mAuth.getCurrentUser().getUid();
 
         String currentEmail = mAuth.getCurrentUser().getEmail();
@@ -180,14 +177,13 @@ public class Profile extends AppCompatActivity implements View.OnClickListener, 
 
 //        userClass = new User(currentEmail, userName, firstname, lastname, location);
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        myRef = database.getReference("users");
+        myRef = FirebaseDatabase.getInstance().getReference().child("users").child(userID);
 
-        myRef.child(userID).child("email").setValue(currentEmail);
-        myRef.child(userID).child("userName").setValue(userName);
-        myRef.child(userID).child("firstName").setValue(firstname);
-        myRef.child(userID).child("lastName").setValue(lastname);
-        myRef.child(userID).child("location").setValue(location);
+        myRef.child("email").setValue(currentEmail);
+        myRef.child("userName").setValue(userName);
+        myRef.child("firstName").setValue(firstname);
+        myRef.child("lastName").setValue(lastname);
+        myRef.child("location").setValue(location);
 
         userNameET.setEnabled(false);
         firstNameET.setEnabled(false);
@@ -199,22 +195,25 @@ public class Profile extends AppCompatActivity implements View.OnClickListener, 
 
     public void readUserData() {
 
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        String userID = mAuth.getCurrentUser().getUid();
+        String userID = FirebaseAuth.getInstance().getUid();
 
         myRef = FirebaseDatabase.getInstance().getReference().child("users").child(userID);
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String userName = snapshot.child("userName").getValue().toString();
-                String userFirstName = snapshot.child("firstName").getValue().toString();
-                String userLastName = snapshot.child("lastName").getValue().toString();
-                String userLocation = snapshot.child("location").getValue().toString();
-                userNameET.setText("username:" + "\t" + userName);
-                firstNameET.setText("first name:" + "\t" + userFirstName);
-                lastNameET.setText("last name:" + "\t" + userLastName);
-                locationET.setText("location :   " + "\t" + userLocation);
+
+                if(snapshot.exists()) {
+                    String userName = snapshot.child("userName").getValue().toString();
+                    String userFirstName = snapshot.child("firstName").getValue().toString();
+                    String userLastName = snapshot.child("lastName").getValue().toString();
+                    String userLocation = snapshot.child("location").getValue().toString();
+
+                    userNameET.setText("username:" + "\t" + userName);
+                    firstNameET.setText("first name:" + "\t" + userFirstName);
+                    lastNameET.setText("last name:" + "\t" + userLastName);
+                    locationET.setText("location :   " + "\t" + userLocation);
+                }
             }
 
             @Override
@@ -230,52 +229,5 @@ public class Profile extends AppCompatActivity implements View.OnClickListener, 
 //
 //
 //        myRef.child(userID).removeValue();
-    }
-
-    @Override
-    public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-        userClass = snapshot.getValue(User.class);
-        Toast.makeText(this, userClass.toString(), Toast.LENGTH_LONG).show();
-
-        Log.d("\n\nFIREBASE", userClass.toString());
-    }
-
-    @Override
-    public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-    }
-
-    @Override
-    public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-    }
-
-    @Override
-    public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-    }
-
-    @Override
-    public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-//        String userID = mAuth.getCurrentUser().getUid();
-//
-//        myRef = FirebaseDatabase.getInstance().getReference().child("users").child(userID);
-//
-//        String userName = snapshot.child("userName").getValue().toString();
-//        String userFirstName = snapshot.child("firstName").getValue().toString();
-//        String userLastName = snapshot.child("lastName").getValue().toString();
-//        String userLocation = snapshot.child("location").getValue().toString();
-//
-//        userNameET.setText("username:" + "\t" + userName);
-//        firstNameET.setText("first name:" + "\t" + userFirstName);
-//        lastNameET.setText("last name:" + "\t" + userLastName);
-//        locationET.setText("location :   " + "\t" + userLocation);
-    }
-
-    @Override
-    public void onCancelled(@NonNull DatabaseError error) {
-
     }
 }

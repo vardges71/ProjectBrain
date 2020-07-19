@@ -106,22 +106,23 @@ public class MainActivity extends AppCompatActivity {
 
         myRef = FirebaseDatabase.getInstance().getReference().child("users");
 
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                for(DataSnapshot snapshot: dataSnapshot.getChildren()) {
+            myRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
                     String user_Name = snapshot.child("userName").getValue().toString();
-//                    userClass.setUserName(user_Name);
-                    String first_Name = snapshot.child("firstName").getValue().toString();
-//                    userClass.setFirstName(first_Name);
-                    String last_Name = snapshot.child("lastName").getValue().toString();
-//                    userClass.setLastName(last_Name);
-                    String location = snapshot.child("location").getValue().toString();
-//                    userClass.setLocation(location);
 
-                    System.out.println(user_Name);
+                    String first_Name = snapshot.child("firstName").getValue().toString();
+
+                    String last_Name = snapshot.child("lastName").getValue().toString();
+
+                    String location = snapshot.child("location").getValue().toString();
+
+
+//                    System.out.println(user_Name);
 
                     User users = new User(user_Name, first_Name, last_Name, location);
 
