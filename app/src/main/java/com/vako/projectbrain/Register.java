@@ -14,14 +14,18 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class Register extends AppCompatActivity implements View.OnClickListener {
 
     EditText userEmailField, passwordField, rePasswordField;
     Button registerButton, cancelButton;
 
-    private DatabaseReference mDatabase;
+    private DatabaseReference myRef;
     private FirebaseAuth mAuth;
 
     @Override
@@ -116,4 +120,5 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
             Toast.makeText(getApplicationContext(), "Please enter valid credentials", Toast.LENGTH_LONG).show();
         }
     }
+
 }

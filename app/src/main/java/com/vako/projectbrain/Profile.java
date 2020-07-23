@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.internal.Constants;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
@@ -34,8 +35,6 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
 
     User userClass;
 
-//    FirebaseDatabase database = FirebaseDatabase.getInstance();
-//    DatabaseReference myRef = database.getReference("users");
     FirebaseAuth mAuth;
     DatabaseReference myRef;
 
@@ -63,7 +62,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
             emailField.setText("email:" + "\t" + email);
         }
 
-        myRef = FirebaseDatabase.getInstance().getReference("users");
+        readUserData();
     }
 
     private void initialize() {
@@ -83,10 +82,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
         saveBtn.setOnClickListener(this);
         deleteBtn = findViewById(R.id.btnDelete);
         deleteBtn.setOnClickListener(this);
-
-        readUserData();
     }
-
 
     // ************************************* Menu part ********************************************
 
@@ -123,9 +119,13 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                 return true;
             case R.id.editUser:
                 userNameET.setEnabled(true);
+//                userNameET.setText("");
                 firstNameET.setEnabled(true);
+//                firstNameET.setText("");
                 lastNameET.setEnabled(true);
+//                lastNameET.setText("");
                 locationET.setEnabled(true);
+//                locationET.setText("");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -165,7 +165,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
 
 // *************************************************************************************************
 
-    private void userSave(View view) {
+    private void userSave(final View view) {
 
         String userID = mAuth.getCurrentUser().getUid();
 
@@ -209,10 +209,10 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                     String userLastName = snapshot.child("lastName").getValue().toString();
                     String userLocation = snapshot.child("location").getValue().toString();
 
-                    userNameET.setText("username:" + "\t" + userName);
-                    firstNameET.setText("first name:" + "\t" + userFirstName);
-                    lastNameET.setText("last name:" + "\t" + userLastName);
-                    locationET.setText("location :   " + "\t" + userLocation);
+                    userNameET.setText(userName);
+                    firstNameET.setText(userFirstName);
+                    lastNameET.setText(userLastName);
+                    locationET.setText(userLocation);
                 }
             }
 
@@ -224,10 +224,25 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
     }
 
     public void deleteUser() {
-//
-//        String userID = mAuth.getCurrentUser().getUid();
-//
-//
-//        myRef.child(userID).removeValue();
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        user.delete()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "User account deleted.");
+                            Intent backToLogIn = new Intent(Profile.this, LogIn.class);
+                            startActivity(backToLogIn);
+                        }
+                    }
+                });
+
+        myRef = FirebaseDatabase.getInstance().getReference();
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        myRef.child("users").child(userID).removeValue();
+
+        Toast.makeText(Profile.this, "Account successfuly deleted", Toast.LENGTH_LONG).show();
     }
 }
