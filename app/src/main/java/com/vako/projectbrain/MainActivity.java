@@ -1,6 +1,7 @@
 package com.vako.projectbrain;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -9,6 +10,7 @@ import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,7 +25,12 @@ public class MainActivity extends AppCompatActivity {
     User userClass;
     FirebaseAuth mAuth;
     DatabaseReference myRef;
-    private String id, email, userName, firstName, lastName, location;
+    private String id;
+    private  String email;
+    private String userName;
+    private String firstName = "first name";
+    private String lastName = "last name";
+    private  String location = "location";
 
     ListView listView;
     ArrayList<User> userList;
@@ -35,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initialize();
-        getUsers();
     }
 
     public void initialize() {
@@ -45,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
 
         userListAdapter = new UserListAdapter(this, userList);
         listView.setAdapter(userListAdapter);
+
+        getUsers();
     }
 
     // ************************************** Action Bar *******************************************
@@ -106,31 +114,31 @@ public class MainActivity extends AppCompatActivity {
 
         myRef = FirebaseDatabase.getInstance().getReference().child("users");
 
-
-            myRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                    String user_Name = snapshot.child("userName").getValue().toString();
+                    User user = new User(userName, firstName, lastName, location);
 
-                    String first_Name = snapshot.child("firstName").getValue().toString();
+                    if (snapshot.child("userName").exists()) {
+                        user.setUserName(snapshot.child("userName").getValue().toString());
+                    }
+                    if (snapshot.child("firstName").exists()) {
+                        user.setFirstName(snapshot.child("firstName").getValue().toString());
+                    }
+                    if (snapshot.child("lastName").exists()) {
+                        user.setLastName(snapshot.child("lastName").getValue().toString());
+                    }
+                    if (snapshot.child("location").exists()) {
+                        user.setLocation(snapshot.child("location").getValue().toString());
+                    }
 
-                    String last_Name = snapshot.child("lastName").getValue().toString();
-
-                    String location = snapshot.child("location").getValue().toString();
-
-
-//                    System.out.println(user_Name);
-
-                    User users = new User(user_Name, first_Name, last_Name, location);
-
-                    userList.add(users);
+                    userList.add(user);
                     userListAdapter.notifyDataSetChanged();
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 

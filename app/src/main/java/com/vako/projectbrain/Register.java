@@ -22,7 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class Register extends AppCompatActivity implements View.OnClickListener {
 
-    EditText userEmailField, passwordField, rePasswordField;
+    EditText userNameField, userEmailField, passwordField, rePasswordField;
     Button registerButton, cancelButton;
 
     private DatabaseReference myRef;
@@ -38,6 +38,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
 
     private void initialize() {
 
+        userNameField = findViewById(R.id.registerUserName);
         userEmailField = findViewById(R.id.registerEmail);
         passwordField = findViewById(R.id.regPasswField);
         rePasswordField = findViewById(R.id.reRegPasswField);
@@ -61,9 +62,6 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
 
                 if (mAuth.getCurrentUser() != null) {
 
-                    Intent nextView = new Intent(Register.this, MainActivity.class);
-                    startActivity(nextView);
-
                     finish();
                 } else {
 
@@ -84,7 +82,9 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
 
         String userPassw;
 
-        if ((passwordField.getText().toString().equals(rePasswordField.getText().toString())) && ((userEmailField.getText().toString().trim().matches(emailPattern) && userEmailField.length() > 0)) && passwordField.length() > 6) {
+        if ((passwordField.getText().toString().equals(rePasswordField.getText().toString())) &&
+                ((userEmailField.getText().toString().trim().matches(emailPattern) &&
+                        userEmailField.length() > 0)) && passwordField.length() > 6) {
 
             String checkedPassw = passwordField.getText().toString().trim();
 
@@ -102,12 +102,13 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
 
                     if (task.isSuccessful()) {
 
+                        userSave();
                         Toast.makeText(getApplicationContext(), "Registration Success!!!", Toast.LENGTH_LONG).show();
 
-                        Intent nextView = new Intent(Register.this, MainActivity.class);
+                        Intent nextView = new Intent(Register.this, Profile.class);
                         startActivity(nextView);
 
-                        userEmailField.setText(null); passwordField.setText(null); rePasswordField.setText(null);
+                        userNameField.setText(""); userEmailField.setText(""); passwordField.setText(""); rePasswordField.setText("");
 
                     } else {
 
@@ -119,6 +120,22 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
 
             Toast.makeText(getApplicationContext(), "Please enter valid credentials", Toast.LENGTH_LONG).show();
         }
+
+    }
+
+    private void userSave() {
+
+        String userID = mAuth.getCurrentUser().getUid();
+
+        String currentEmail = mAuth.getCurrentUser().getEmail();
+        String userName = userNameField.getText().toString();
+
+        myRef = FirebaseDatabase.getInstance().getReference().child("users").child(userID);
+
+        myRef.child("email").setValue(currentEmail);
+        myRef.child("userName").setValue(userName);
+
+        Toast.makeText(this, "Your credentials success added", Toast.LENGTH_LONG).show();
     }
 
 }

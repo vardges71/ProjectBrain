@@ -3,7 +3,7 @@ package com.vako.projectbrain;
 public class User {
 
     private String userID;
-    private  String userName;
+    private String userName;
     private String userEmail;
     private String firstName;
     private String lastName;
@@ -19,13 +19,13 @@ public class User {
         this.location = location;
     }
 
-    public User(String name, String currentEmail, String firstname, String lastname, String userName) {
-
-    }
-
     public User(String email) {
 
         this.userEmail = email;
+    }
+
+    public User() {
+
     }
 
     public User(String userName, String firstName, String lastName, String location) {
