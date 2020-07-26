@@ -26,7 +26,7 @@
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#19000000"
+        android:background="@color/divider_color"
         app:layout_constraintTop_toBottomOf="@id/userNameTV"
         app:layout_constraintStart_toStartOf="parent"/>
 
@@ -47,15 +47,7 @@
             android:textColor="@color/gray"
             android:textSize="10sp" />
 
-        <EditText
-            android:id="@+id/postContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:gravity="start|top"
-            android:inputType="textMultiLine"
-            android:textColor="@color/barColor"
-            android:textSize="13sp" />
+
 
     </LinearLayout>
 
@@ -72,27 +64,28 @@
         <TextView
             android:id="@+id/name"
             android:layout_width="wrap_content"
-            android:layout_height="33dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
             android:gravity="center"
             android:text="Tigran Gasparyan, "
             android:textColor="@color/gray"
             android:textSize="10sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/location"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/location"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Montreal, QC"
             android:textColor="@color/gray"
             android:textSize="10sp"
-            app:layout_constraintBottom_toBottomOf="@+id/followBtn"
+            app:layout_constraintBaseline_toBaselineOf="@id/name"
             app:layout_constraintStart_toEndOf="@+id/name"
-            app:layout_constraintTop_toTopOf="@+id/followBtn" />
+            app:layout_constraintTop_toTopOf="@+id/name"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
         <Button
             android:id="@+id/followBtn"
@@ -104,8 +97,11 @@
             android:textAllCaps="false"
             android:textColor="@color/barColor"
             android:textSize="12sp"
+            android:gravity="center"
+            app:layout_constraintBaseline_toBaselineOf="@id/location"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

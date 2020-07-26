@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -33,11 +32,9 @@ public class UserListAdapter extends ArrayAdapter<User> implements View.OnClickL
         User user = getItem(position);
         TextView userNameTV = (TextView) customView.findViewById(R.id.userNameTV);
         TextView lastPostedLbl = (TextView) customView.findViewById(R.id.lastPostedLbl);
-        EditText postContainerET = (EditText) customView.findViewById(R.id.postContainer);
         TextView name = (TextView) customView.findViewById(R.id.name);
         TextView location = (TextView) customView.findViewById(R.id.location);
         Button followBtn = (Button) customView.findViewById(R.id.followBtn);
-
 
         userNameTV.setText(user.getUserName());
         lastPostedLbl.setText("Last posted");

@@ -7,4 +7,8 @@
     <string name="register">register</string>
     <string name="forgot_password">forgot password?</string>
     <string name="search_icon">Search</string>
+    <string name="search_users">search_users</string>
+    <string name="search_users_hint">search users</string>
+    <string name="app_label">Brain</string>
+    <string name="idea_title">Idea Title</string>
 </resources>

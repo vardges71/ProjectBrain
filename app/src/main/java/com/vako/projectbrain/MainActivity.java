@@ -1,12 +1,17 @@
 package com.vako.projectbrain;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,20 +21,21 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    User userClass;
     FirebaseAuth mAuth;
     DatabaseReference myRef;
+
     private String id;
     private  String email;
     private String userName;
-    private String firstName = "first name";
-    private String lastName = "last name";
+    private String firstName = "name";
+    private String lastName = "surname";
     private  String location = "location";
 
     ListView listView;
@@ -52,7 +58,20 @@ public class MainActivity extends AppCompatActivity {
         userListAdapter = new UserListAdapter(this, userList);
         listView.setAdapter(userListAdapter);
 
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                String selectedUser = (String) adapterView.getItemAtPosition(position);
+
+                Intent intent = new Intent(MainActivity.this, SingleUserActivity.class);
+                startActivity(intent);
+                Log.d("TAGGGG", "FUCK, GO TO SINGLE USER ACTIVITY");
+            }
+        });
+
         getUsers();
+        searchUsers();
     }
 
     // ************************************** Action Bar *******************************************
@@ -71,6 +90,18 @@ public class MainActivity extends AppCompatActivity {
 
         MenuItem editButton = menu.findItem(R.id.editUser);
         editButton.setVisible(false);
+
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.search_icon).getActionView();
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
+
+//        searchView.setSubmitButtonEnabled(true);
+//        searchView.setOnQueryTextListener(this);
+
         return true;
     }
 
@@ -99,7 +130,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // *****************************
     private void logOut() {
 
         FirebaseAuth.getInstance().signOut();
@@ -107,6 +137,8 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, LogIn.class);
         startActivity(intent);
     }
+
+    // *********************************************************************************************
 
     private void getUsers() {
 
@@ -146,7 +178,47 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
+
+    // ********************************* Search Users **********************************************
+
     private void searchUsers() {
 
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users");
+//
+        String query = "a";
+        String firstLetterCapital = query.substring(0, 1).toUpperCase() + query.substring(1);
+        Query eventSearchQuery = ref.orderByChild("userName").startAt(firstLetterCapital).endAt(firstLetterCapital + "uf8ff");
+//        equalTo("Bibi")
+        eventSearchQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
+                    System.out.println(userSnapshot.getKey());
+                    System.out.println(userSnapshot.child("userName").getValue(String.class));
+                    if (userSnapshot.child("firstName").exists() && userSnapshot.child("lastName").exists()) {
+                        Log.d("ATTENTION", userSnapshot.child("firstName").getValue().toString() + " " + userSnapshot.child("lastName").getValue().toString() + " from " + userSnapshot.child("location").getValue().toString());
+                    } else {
+                        Log.d("ATTENTION", "User credentials is not exist");
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                throw databaseError.toException();
+            }
+        });
     }
+
+
+//    @Override
+//    public boolean onQueryTextSubmit(String query) {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onQueryTextChange(String newText) {
+//        return true;
+//    }
 }

@@ -95,6 +95,9 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
         MenuItem userButton = menu.findItem(R.id.userMenu);
         userButton.setVisible(false);
 
+        MenuItem searchButton = menu.findItem(R.id.search_icon);
+        searchButton.setVisible(false);
+
         return true;
     }
 
