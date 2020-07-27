@@ -8,11 +8,9 @@
     android:padding="20dp"
     tools:context=".MainActivity">
 
-    <ListView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mainList"
-        android:descendantFocusability="blocksDescendants"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    
 </androidx.constraintlayout.widget.ConstraintLayout>

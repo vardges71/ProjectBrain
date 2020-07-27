@@ -53,10 +53,11 @@
         <TextView
             android:id="@+id/singleUserIdeasNumberLabel"
             android:layout_width="0dp"
-            app:layout_constraintWidth_percent="0.3"
+            app:layout_constraintWidth_percent="0.4"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toEndOf="@id/singleUserName"
             app:layout_constraintBottom_toBottomOf="@id/singleUserName"
+            android:gravity="right|center"
             android:textSize="14sp"
             android:textColor="@color/barColor"
             android:text="ideas quantity: " />
@@ -64,10 +65,12 @@
         <TextView
             android:id="@+id/singleUserIdeasNumberResult"
             android:layout_width="0dp"
-            app:layout_constraintWidth_percent="0.2"
+            app:layout_constraintWidth_percent="0.1"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toEndOf="@id/singleUserIdeasNumberLabel"
             app:layout_constraintBottom_toBottomOf="@id/singleUserName"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:gravity="center|right"
             android:textSize="14sp"
             android:textColor="@color/barColor"
             android:text="23" />
@@ -101,7 +104,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <ListView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/ideasList"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

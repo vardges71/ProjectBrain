@@ -9,12 +9,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -25,6 +26,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,15 +34,16 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference myRef;
 
     private String id;
-    private  String email;
+    private String email;
     private String userName;
     private String firstName = "name";
     private String lastName = "surname";
-    private  String location = "location";
+    private String location = "location";
 
-    ListView listView;
-    ArrayList<User> userList;
-    UserListAdapter userListAdapter;
+    private List<User> userList = new ArrayList<>();
+    private RecyclerView recyclerView;
+    private UserListAdapter mAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,23 +55,30 @@ public class MainActivity extends AppCompatActivity {
 
     public void initialize() {
 
-        listView = findViewById(R.id.mainList);
-        userList = new ArrayList<User>();
+        recyclerView = (RecyclerView) findViewById(R.id.mainList);
+        mAdapter = new UserListAdapter(userList);
+        recyclerView.setHasFixedSize(true);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        userListAdapter = new UserListAdapter(this, userList);
-        listView.setAdapter(userListAdapter);
+        recyclerView.setAdapter(mAdapter);
 
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                String selectedUser = (String) adapterView.getItemAtPosition(position);
+            public void onClick(View view, int position) {
 
+                User user = userList.get(position);
                 Intent intent = new Intent(MainActivity.this, SingleUserActivity.class);
                 startActivity(intent);
-                Log.d("TAGGGG", "FUCK, GO TO SINGLE USER ACTIVITY");
             }
-        });
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
 
         getUsers();
         searchUsers();
@@ -98,9 +108,6 @@ public class MainActivity extends AppCompatActivity {
                 (SearchView) menu.findItem(R.id.search_icon).getActionView();
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
-
-//        searchView.setSubmitButtonEnabled(true);
-//        searchView.setOnQueryTextListener(this);
 
         return true;
     }
@@ -166,9 +173,8 @@ public class MainActivity extends AppCompatActivity {
                     if (snapshot.child("location").exists()) {
                         user.setLocation(snapshot.child("location").getValue().toString());
                     }
-
                     userList.add(user);
-                    userListAdapter.notifyDataSetChanged();
+                    mAdapter.notifyDataSetChanged();
                 }
             }
             @Override
@@ -177,8 +183,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-
 
     // ********************************* Search Users **********************************************
 
@@ -210,15 +214,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-
-//    @Override
-//    public boolean onQueryTextSubmit(String query) {
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onQueryTextChange(String newText) {
-//        return true;
-//    }
 }
