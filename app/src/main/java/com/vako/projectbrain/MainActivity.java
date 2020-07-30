@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         logoutBtn.setVisible(true);
 
         MenuItem editButton = menu.findItem(R.id.editUser);
-        editButton.setVisible(true);
+        editButton.setVisible(false);
 
 //        // Associate searchable configuration with the SearchView
 //        SearchManager searchManager =
