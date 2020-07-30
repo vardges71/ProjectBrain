@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,6 +31,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "MainActivity";
     FirebaseAuth mAuth;
     DatabaseReference myRef;
 
@@ -39,11 +41,11 @@ public class MainActivity extends AppCompatActivity {
     private String firstName = "name";
     private String lastName = "surname";
     private String location = "location";
+    private String idea = "bla, bla-bla";
 
     private List<User> userList = new ArrayList<>();
     private RecyclerView recyclerView;
     private UserListAdapter mAdapter;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,9 +71,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view, int position) {
 
-                User user = userList.get(position);
+                User clickedUser = userList.get(position);
+
                 Intent intent = new Intent(MainActivity.this, SingleUserActivity.class);
+
+                intent.putExtra("userName", clickedUser.getUserName());
+                intent.putExtra("userFirstName", clickedUser.getFirstName());
+                intent.putExtra("userLastName", clickedUser.getLastName());
+                intent.putExtra("userLocation", clickedUser.getLocation());
+
                 startActivity(intent);
+
+//                Log.d(TAG, "USER CRED " + clickedUser.getIdea());
             }
 
             @Override
@@ -96,18 +107,18 @@ public class MainActivity extends AppCompatActivity {
         mainButton.setVisible(false);
 
         MenuItem logoutBtn = menu.findItem(R.id.logout_icon);
-        logoutBtn.setVisible(false);
+        logoutBtn.setVisible(true);
 
         MenuItem editButton = menu.findItem(R.id.editUser);
-        editButton.setVisible(false);
+        editButton.setVisible(true);
 
-        // Associate searchable configuration with the SearchView
-        SearchManager searchManager =
-                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView =
-                (SearchView) menu.findItem(R.id.search_icon).getActionView();
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getComponentName()));
+//        // Associate searchable configuration with the SearchView
+//        SearchManager searchManager =
+//                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+//        SearchView searchView =
+//                (SearchView) menu.findItem(R.id.search_icon).getActionView();
+//        searchView.setSearchableInfo(
+//                searchManager.getSearchableInfo(getComponentName()));
 
         return true;
     }
@@ -129,8 +140,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.logout_icon:
                 logOut();
                 return true;
-            case R.id.search_icon:
-                searchUsers();
+            case R.id.goToIdea:
+                Intent toWriteIdea = new Intent(this, WriteIdeaActivity.class);
+                startActivity(toWriteIdea);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -173,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
                     if (snapshot.child("location").exists()) {
                         user.setLocation(snapshot.child("location").getValue().toString());
                     }
+
                     userList.add(user);
                     mAdapter.notifyDataSetChanged();
                 }
@@ -201,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println(userSnapshot.getKey());
                     System.out.println(userSnapshot.child("userName").getValue(String.class));
                     if (userSnapshot.child("firstName").exists() && userSnapshot.child("lastName").exists()) {
-                        Log.d("ATTENTION", userSnapshot.child("firstName").getValue().toString() + " " + userSnapshot.child("lastName").getValue().toString() + " from " + userSnapshot.child("location").getValue().toString());
+                        Log.d(TAG, userSnapshot.child("firstName").getValue().toString() + " " + userSnapshot.child("lastName").getValue().toString() + " from " + userSnapshot.child("location").getValue().toString());
                     } else {
                         Log.d("ATTENTION", "User credentials is not exist");
                     }

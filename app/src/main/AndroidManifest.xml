@@ -9,35 +9,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <activity
+            android:name=".WriteIdeaActivity"
+            android:label=""
+            android:theme="@style/AppTheme"></activity>
         <activity
             android:name=".SingleUserActivity"
             android:label=" "
-            android:theme="@style/AppTheme"/>
-
-        <activity
-            android:name=".SearchableActivity"
-            android:configChanges="orientation"
-            android:launchMode="singleTask"
-            android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNoActionBar"
-            android:windowSoftInputMode="stateHidden">
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable">
-
-            </meta-data>
-        </activity>
-
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".Profile"
             android:label=" " />
-
         <activity
             android:name=".Register"
             android:theme="@style/AppThemeNoActionBar" />
-
         <activity
             android:name=".LogIn"
             android:theme="@style/AppThemeNoActionBar">
@@ -47,14 +32,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".MainActivity"
             android:label=" "
-            android:theme="@style/AppTheme">
-
-        </activity>
-
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

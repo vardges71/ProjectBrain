@@ -8,8 +8,9 @@ public class User {
     private String firstName;
     private String lastName;
     private String location;
+    private Idea idea;
 
-    public User(String userID, String userName, String userEmail, String firstName, String lastName, String location) {
+    public User(String userID, String userName, String userEmail, String firstName, String lastName, String location, Idea idea) {
 
         this.userID = userID;
         this.userName = userName;
@@ -17,7 +18,9 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.location = location;
+        this.idea = idea;
     }
+
 
     public User(String email) {
 
@@ -35,6 +38,10 @@ public class User {
         this.lastName = lastName;
         this.location = location;
     }
+
+//    public User(String userName, String firstName, String lastName, String location, String idea) {
+//
+//    }
 
     public String getUserName() { return userName; }
     public void setUserName(String userName) { this.userName = userName; }
@@ -54,6 +61,9 @@ public class User {
     public String getLocation() { return location; }
     public void setLocation(String location) { this.location = location; }
 
+    public Idea getIdea() { return idea; }
+    public void setIdea(Idea idea) { this.idea = idea; }
+
     @Override
     public String toString() {
         return "User{" +
@@ -63,6 +73,7 @@ public class User {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", location='" + location + '\'' +
+                ", idea=" + idea +
                 '}';
     }
 }

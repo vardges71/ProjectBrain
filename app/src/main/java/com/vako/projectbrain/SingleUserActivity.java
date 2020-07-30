@@ -1,5 +1,6 @@
 package com.vako.projectbrain;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -9,15 +10,20 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +36,18 @@ public class SingleUserActivity extends AppCompatActivity {
     private List<Idea> ideaList = new ArrayList<>();
     private RecyclerView recyclerView;
     private IdeasListAdapter lAdapter;
+
+    TextView singleUserName, singleUserFullName, singleUserLocation, singleUserIdeasNumberResult;
+
+    private String id;
+    private String email;
+    private String userName;
+    private String firstName = "name";
+    private String lastName = "surname";
+    private String location = "location";
+    private String idea = "bla, bla-bla";
+
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +66,11 @@ public class SingleUserActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
+        singleUserName = findViewById(R.id.singleUserName);
+        singleUserFullName = findViewById(R.id.singleUserFullName);
+        singleUserLocation = findViewById(R.id.singleUserLocation);
+        singleUserIdeasNumberResult = findViewById(R.id.singleUserIdeasNumberResult);
+
         recyclerView.setAdapter(lAdapter);
 
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
@@ -65,6 +88,8 @@ public class SingleUserActivity extends AppCompatActivity {
 
             }
         }));
+
+        getUser();
     }
 
     // ************************************** Action Bar *******************************************
@@ -85,12 +110,12 @@ public class SingleUserActivity extends AppCompatActivity {
         editButton.setVisible(false);
 
         // Associate searchable configuration with the SearchView
-        SearchManager searchManager =
-                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView =
-                (SearchView) menu.findItem(R.id.search_icon).getActionView();
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getComponentName()));
+//        SearchManager searchManager =
+//                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+//        SearchView searchView =
+//                (SearchView) menu.findItem(R.id.search_icon).getActionView();
+//        searchView.setSearchableInfo(
+//                searchManager.getSearchableInfo(getComponentName()));
 
         return true;
     }
@@ -109,12 +134,16 @@ public class SingleUserActivity extends AppCompatActivity {
                 Intent toProfile = new Intent(this, Profile.class);
                 startActivity(toProfile);
                 return true;
+            case R.id.goToIdea:
+                Intent toWriteIdea = new Intent(this, WriteIdeaActivity.class);
+                startActivity(toWriteIdea);
+                return true;
             case R.id.logout_icon:
                 logOut();
                 return true;
-            case R.id.search_icon:
-
-                return true;
+//            case R.id.search_icon:
+//
+//                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -129,4 +158,46 @@ public class SingleUserActivity extends AppCompatActivity {
     }
 
     // *********************************************************************************************
+
+    private void getUser() {
+
+
+        Bundle extras = getIntent().getExtras();
+        singleUserName.setText(extras.getString("userName"));
+        singleUserFullName.setText(extras.getString("userFirstName") + " " + extras.getString("userLastName"));
+        singleUserLocation.setText(extras.getString("userLocation"));
+
+//        final String userID = FirebaseAuth.getInstance().getUid();
+//
+//        myRef = FirebaseDatabase.getInstance().getReference().child("users").child(userID);
+//
+////        final User user = new User(userName, firstName, lastName, location);
+//
+//        myRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//
+//                    if (dataSnapshot.child("userName").exists()) {
+//                        user.setUserName(dataSnapshot.child("userName").getValue().toString());
+//                        singleUserName.setText(user.getUserName());
+//                        System.out.println("USER DETAIS: " + user.getUserName());
+//                    }
+//                    if (dataSnapshot.child("firstName").exists()) {
+//                        user.setFirstName(dataSnapshot.child("firstName").getValue().toString());
+//                    }
+//                    if (dataSnapshot.child("lastName").exists()) {
+//                        user.setLastName(dataSnapshot.child("lastName").getValue().toString());
+//                    }
+//                    if (dataSnapshot.child("location").exists()) {
+//                        user.setLocation(dataSnapshot.child("location").getValue().toString());
+//                        singleUserLocation.setText(user.getLocation());
+//                    }
+//            }
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+        Log.d("ATENNTION", "USER DETAIS: " + singleUserFullName);
+    }
 }

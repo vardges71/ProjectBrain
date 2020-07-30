@@ -42,7 +42,6 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
 
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.main_list_cell, parent, false);
-        // set the view's size, margins, paddings and layout parameters
 
         return new ViewHolder(itemView);
     }

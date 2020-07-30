@@ -1,30 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <item
-        android:id="@+id/search_icon"
-        android:icon="@drawable/ic_search_24px"
-        android:title="@string/search_icon"
-        android:orderInCategory="100"
-        app:showAsAction="always"
-        app:actionViewClass="android.widget.SearchView">
-
-    </item>
-
-    <item
-        android:id="@+id/mainActtivity"
-        android:icon="@drawable/ic_home_thin"
-        android:orderInCategory="101"
-        app:showAsAction="always"
-        android:title="main" />
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/goToIdea"
         android:icon="@drawable/ic_idea"
-        android:orderInCategory="102"
+        android:orderInCategory="101"
         app:showAsAction="always"
         android:title="idea" />
+
+    <item
+        android:id="@+id/mainActtivity"
+        android:icon="@drawable/ic_home_thin"
+        android:orderInCategory="102"
+        app:showAsAction="always"
+        android:title="main" />
 
     <item
         android:id="@+id/userMenu"
@@ -47,4 +37,5 @@
         app:showAsAction="always"
         android:title="LogOut"
         />
+
 </menu>

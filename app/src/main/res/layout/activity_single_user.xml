@@ -5,16 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backColor"
-    android:padding="16dp"
     tools:context=".SingleUserActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/singleUserTop"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintHeight_percent="0.15"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        android:padding="16dp">
 
         <TextView
             android:id="@+id/singleUserName"
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/singleUserName"
-            android:textSize="16sp"
+            android:textSize="12sp"
             android:textColor="@color/barColor"
             android:text="firstname lastname" />
 
@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/singleUserFullName"
-            android:textSize="14sp"
+            android:textSize="10sp"
             android:textColor="@color/barColor"
             android:text="Montreal, QC" />
 
@@ -85,24 +85,15 @@
         app:layout_constraintTop_toBottomOf="@id/singleUserTop"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    <TextView
-        android:id="@+id/userIdeasLabel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/singleUserTop"
-        android:text="user ideas:"
-        android:textColor="@color/barColor"
-        android:textSize="15sp"
-        android:textStyle="italic" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/singleUserMiddle"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintHeight_percent="0.8"
-        app:layout_constraintTop_toBottomOf="@id/userIdeasLabel"
+        app:layout_constraintTop_toBottomOf="@id/singleUserTop"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:padding="16dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/ideasList"
