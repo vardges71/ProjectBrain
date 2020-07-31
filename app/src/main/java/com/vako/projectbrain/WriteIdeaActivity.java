@@ -76,6 +76,9 @@ public class WriteIdeaActivity extends AppCompatActivity implements View.OnClick
         MenuItem editButton = menu.findItem(R.id.editUser);
         editButton.setVisible(true);
 
+        MenuItem logoutBtn = menu.findItem(R.id.logout_icon);
+        logoutBtn.setVisible(false);
+
         return true;
     }
 
@@ -161,6 +164,9 @@ public class WriteIdeaActivity extends AppCompatActivity implements View.OnClick
         contextET.setEnabled(false);
         contentET.setEnabled(false);
         contentET.setMovementMethod(new ScrollingMovementMethod());
+
+        Intent toMain = new Intent(WriteIdeaActivity.this, MainActivity.class);
+        startActivity(toMain);
     }
 
     public void getIdea() {

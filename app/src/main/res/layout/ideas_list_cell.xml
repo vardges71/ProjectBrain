@@ -11,11 +11,11 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:textColor="@color/barColor"
-        android:textSize="17sp"
+        android:textSize="15sp"
         android:textStyle="bold|italic"
         android:text="Title" />
 
-    <EditText
+    <TextView
         android:id="@+id/ideasContext"
         android:layout_width="match_parent"
         android:layout_height="80dp"
@@ -23,9 +23,10 @@
         android:ems="10"
         android:gravity="start|top"
         android:inputType="textMultiLine"
+        android:scrollbars = "vertical"
         android:background="@color/transparent"
         android:textColor="@color/barColor"
-        android:textSize="15sp"
+        android:textSize="12sp"
         android:text="bla bla bla"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

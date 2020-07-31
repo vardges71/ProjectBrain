@@ -46,6 +46,27 @@
             android:textColor="@color/gray"
             android:textSize="10sp" />
 
+        <TextView
+            android:id="@+id/ideasTitleTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textStyle="bold|italic"
+            android:textColor="@color/barColor"
+            android:textAlignment="textEnd"
+            android:text="Baghadanos" />
+
+        <TextView
+            android:id="@+id/ideasContextTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:textSize="10sp"
+            android:textStyle="italic"
+            android:textColor="@color/barColor"
+            android:text="TextView" />
+
+
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout

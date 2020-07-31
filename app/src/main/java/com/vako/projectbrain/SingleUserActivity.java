@@ -33,7 +33,7 @@ public class SingleUserActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     DatabaseReference myRef;
 
-    private List<Idea> ideaList = new ArrayList<>();
+    private List<User> ideaList = new ArrayList<>();
     private RecyclerView recyclerView;
     private IdeasListAdapter lAdapter;
 
@@ -45,9 +45,13 @@ public class SingleUserActivity extends AppCompatActivity {
     private String firstName = "name";
     private String lastName = "surname";
     private String location = "location";
-    private String idea = "bla, bla-bla";
+    private String ideaTitle = "";
+    private String ideaContext = "";
+    private String ideaCount = "";
+    private String modifiedDate;
 
-    private User user;
+
+    private User idea;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,9 +82,9 @@ public class SingleUserActivity extends AppCompatActivity {
             @Override
             public void onClick(View view, int position) {
 
-                Idea idea = ideaList.get(position);
-                Intent intent = new Intent(SingleUserActivity.this, SingleUserActivity.class);
-                startActivity(intent);
+                User idea = ideaList.get(position);
+//                Intent intent = new Intent(SingleUserActivity.this, SingleUserActivity.class);
+//                startActivity(intent);
             }
 
             @Override
@@ -161,43 +165,63 @@ public class SingleUserActivity extends AppCompatActivity {
 
     private void getUser() {
 
-
-        Bundle extras = getIntent().getExtras();
+        final Bundle extras = getIntent().getExtras();
         singleUserName.setText(extras.getString("userName"));
         singleUserFullName.setText(extras.getString("userFirstName") + " " + extras.getString("userLastName"));
         singleUserLocation.setText(extras.getString("userLocation"));
+        singleUserIdeasNumberResult.setText(extras.getString("ideaCount"));
 
-//        final String userID = FirebaseAuth.getInstance().getUid();
+        final String clickedUserID = extras.getString("clickedUserID");
+
+        myRef = FirebaseDatabase.getInstance().getReference().child("users");
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+                    if (snapshot.child("ideas").exists()) {
+
+                        for (DataSnapshot snap : snapshot.child("ideas").getChildren()) {
+
+                            User idea = new User(ideaTitle, ideaContext, modifiedDate);
+
+                            if (snap.child("ideaTitle").exists()) {
+                                idea.setIdeaTitle(snap.child("ideaTitle").getValue().toString());
+                            }
+                            if (snap.child("ideaContext").exists()) {
+                                idea.setIdeaContext(snap.child("ideaContext").getValue().toString());
+                            }
+                            if (snap.child("ideaContent").exists()) {
+                                idea.setIdeaContent(snap.child("ideaContent").getValue().toString());
+                            }
+                            if (snap.child("modifiedDate").exists()) {
+                                idea.setCreatedDate(snap.child("modifiedDate").getValue().toString());
+                            }
+                            ideaList.add(idea);
+                            lAdapter.notifyDataSetChanged();
+                        }
+                    }
+                }
+
+                Log.d("ATTENTION", "CURRENT USER ID: " + clickedUserID + " AND USERNAME: " + extras.getString("userName"));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+//        User idea = new User(ideaTitle, ideaContext, modifiedDate);
+//        idea.setIdeaTitle(extras.getString("ideaTitle"));
+//        idea.setIdeaContext(extras.getString("ideaContext"));
+//        idea.setIdeaContent(extras.getString("ideaContent"));
+//        idea.setIdeaCount(extras.getString("ideaModDate"));
 //
-//        myRef = FirebaseDatabase.getInstance().getReference().child("users").child(userID);
-//
-////        final User user = new User(userName, firstName, lastName, location);
-//
-//        myRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//
-//                    if (dataSnapshot.child("userName").exists()) {
-//                        user.setUserName(dataSnapshot.child("userName").getValue().toString());
-//                        singleUserName.setText(user.getUserName());
-//                        System.out.println("USER DETAIS: " + user.getUserName());
-//                    }
-//                    if (dataSnapshot.child("firstName").exists()) {
-//                        user.setFirstName(dataSnapshot.child("firstName").getValue().toString());
-//                    }
-//                    if (dataSnapshot.child("lastName").exists()) {
-//                        user.setLastName(dataSnapshot.child("lastName").getValue().toString());
-//                    }
-//                    if (dataSnapshot.child("location").exists()) {
-//                        user.setLocation(dataSnapshot.child("location").getValue().toString());
-//                        singleUserLocation.setText(user.getLocation());
-//                    }
-//            }
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
+//        ideaList.add(idea);
+//        lAdapter.notifyDataSetChanged();
+
         Log.d("ATENNTION", "USER DETAIS: " + singleUserFullName);
     }
 }

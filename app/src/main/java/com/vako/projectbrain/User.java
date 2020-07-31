@@ -8,9 +8,23 @@ public class User {
     private String firstName;
     private String lastName;
     private String location;
-    private Idea idea;
+    private String ideaTitle;
+    private String ideaContext;
+    private String ideaContent;
+    private String createdDate;
 
-    public User(String userID, String userName, String userEmail, String firstName, String lastName, String location, Idea idea) {
+    private String ideaCount;
+
+    public User(String userID,
+                String userName,
+                String userEmail,
+                String firstName,
+                String lastName,
+                String location,
+                String ideaTitle,
+                String ideaContext,
+                String ideaContent,
+                String createdDate) {
 
         this.userID = userID;
         this.userName = userName;
@@ -18,17 +32,15 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.location = location;
-        this.idea = idea;
+        this.ideaTitle = ideaTitle;
+        this.ideaContext = ideaContext;
+        this.ideaContent = ideaContent;
+        this.createdDate = createdDate;
     }
-
 
     public User(String email) {
 
         this.userEmail = email;
-    }
-
-    public User() {
-
     }
 
     public User(String userName, String firstName, String lastName, String location) {
@@ -39,9 +51,25 @@ public class User {
         this.location = location;
     }
 
-//    public User(String userName, String firstName, String lastName, String location, String idea) {
-//
-//    }
+    public User(String userID, String userName, String firstName, String lastName, String location, String ideaTitle, String ideaContext, String ideaCount) {
+
+        this.userID = userID;
+        this.userName = userName;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.location = location;
+        this.ideaTitle = ideaTitle;
+        this.ideaContext = ideaContext;
+        this.ideaCount = ideaCount;
+    }
+
+    public User(String ideaTitle, String ideaContext, String modifiedDate) {
+
+        this.ideaTitle = ideaTitle;
+        this.ideaContext = ideaContext;
+        this.createdDate = modifiedDate;
+    }
+
 
     public String getUserName() { return userName; }
     public void setUserName(String userName) { this.userName = userName; }
@@ -61,8 +89,21 @@ public class User {
     public String getLocation() { return location; }
     public void setLocation(String location) { this.location = location; }
 
-    public Idea getIdea() { return idea; }
-    public void setIdea(Idea idea) { this.idea = idea; }
+    public String getIdeaTitle() { return ideaTitle; }
+    public void setIdeaTitle(String ideaTitle) { this.ideaTitle = ideaTitle; }
+
+    public String getIdeaContext() { return ideaContext; }
+    public void setIdeaContext(String ideaContext) { this.ideaContext = ideaContext; }
+
+    public String getIdeaContent() { return ideaContent; }
+    public void setIdeaContent(String ideaContent) { this.ideaContent = ideaContent; }
+
+    public String getCreatedDate() { return createdDate; }
+    public void setCreatedDate(String createdDate) { this.createdDate = createdDate; }
+
+    public String getIdeaCount() { return ideaCount; }
+    public void setIdeaCount(String ideaCount) { this.ideaCount = ideaCount; }
+
 
     @Override
     public String toString() {
@@ -73,7 +114,11 @@ public class User {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", location='" + location + '\'' +
-                ", idea=" + idea +
+                ", ideaTitle='" + ideaTitle + '\'' +
+                ", ideaContext='" + ideaContext + '\'' +
+                ", ideaContent='" + ideaContent + '\'' +
+                ", createdDate='" + createdDate + '\'' +
+                ", ideaCount='" + ideaCount + '\'' +
                 '}';
     }
 }

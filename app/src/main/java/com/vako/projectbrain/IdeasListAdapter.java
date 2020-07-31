@@ -1,10 +1,9 @@
 package com.vako.projectbrain;
 
-import android.content.Context;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,22 +13,23 @@ import java.util.List;
 
 public class IdeasListAdapter extends RecyclerView.Adapter<IdeasListAdapter.ViewHolder> {
 
-    private List<Idea> ideaList;
+    private List<User> ideaList;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView ideaTitle;
-        public EditText context;
+        public TextView context;
 
         public ViewHolder(@NonNull View customView) {
             super(customView);
 
             ideaTitle = (TextView) customView.findViewById(R.id.ideasTitle);
-            context = (EditText) customView.findViewById(R.id.ideasContext);
+            context = (TextView) customView.findViewById(R.id.ideasContext);
+            context.setMovementMethod(new ScrollingMovementMethod());
         }
     }
 
-    public IdeasListAdapter(List<Idea> myDataset) {
+    public IdeasListAdapter(List<User> myDataset) {
         ideaList = myDataset;
     }
 
@@ -37,19 +37,19 @@ public class IdeasListAdapter extends RecyclerView.Adapter<IdeasListAdapter.View
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View itemView = LayoutInflater.from(parent.getContext())
+        View ideaView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.ideas_list_cell, parent, false);
         // set the view's size, margins, paddings and layout parameters
 
-        return new ViewHolder(itemView);
+        return new ViewHolder(ideaView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        Idea idea = ideaList.get(position);
-        holder.ideaTitle.setText(idea.getTitle());
-        holder.context.setText(idea.getContext());
+        User idea = ideaList.get(position);
+        holder.ideaTitle.setText(idea.getIdeaTitle());
+        holder.context.setText(idea.getIdeaContext());
     }
 
     @Override
@@ -57,28 +57,3 @@ public class IdeasListAdapter extends RecyclerView.Adapter<IdeasListAdapter.View
         return ideaList.size();
     }
 }
-//    @NonNull
-//    @Override
-//    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-//
-//        LayoutInflater inflater = LayoutInflater.from(getContext());
-//        View customView = convertView;
-//
-//        if (customView == null){
-//            customView = inflater.inflate(R.layout.ideas_list_cell, parent,false); }
-//
-//        Idea idea = getItem(position);
-//        TextView ideaTitleTV = (TextView) customView.findViewById(R.id.ideasTitle);
-//        TextView ideaContextTV = (TextView) customView.findViewById(R.id.ideasContext);
-//
-//        ideaTitleTV.setText(idea.getTitle());
-//        ideaContextTV.setText(idea.getContext());
-//
-//        return customView;
-//    }
-//
-//    @Override
-//    public void onClick(View v) {
-//
-//    }
-//}

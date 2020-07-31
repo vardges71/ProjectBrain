@@ -35,13 +35,15 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     DatabaseReference myRef;
 
-    private String id;
+    private String userId;
     private String email;
     private String userName;
     private String firstName = "name";
     private String lastName = "surname";
     private String location = "location";
-    private String idea = "bla, bla-bla";
+    private String ideaTitle = "";
+    private String ideaContext = "";
+    private String ideaCount = "";
 
     private List<User> userList = new ArrayList<>();
     private RecyclerView recyclerView;
@@ -75,10 +77,16 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(MainActivity.this, SingleUserActivity.class);
 
+                intent.putExtra("clickedUserID", clickedUser.getUserID());
                 intent.putExtra("userName", clickedUser.getUserName());
                 intent.putExtra("userFirstName", clickedUser.getFirstName());
                 intent.putExtra("userLastName", clickedUser.getLastName());
                 intent.putExtra("userLocation", clickedUser.getLocation());
+                intent.putExtra("ideaCount", clickedUser.getIdeaCount());
+                intent.putExtra("ideaTitle", clickedUser.getIdeaTitle());
+                intent.putExtra("ideaContext", clickedUser.getIdeaContext());
+                intent.putExtra("ideaContent", clickedUser.getIdeaContent());
+                intent.putExtra("ideaModDate", clickedUser.getCreatedDate());
 
                 startActivity(intent);
 
@@ -107,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
         mainButton.setVisible(false);
 
         MenuItem logoutBtn = menu.findItem(R.id.logout_icon);
-        logoutBtn.setVisible(true);
+        logoutBtn.setVisible(false);
 
         MenuItem editButton = menu.findItem(R.id.editUser);
         editButton.setVisible(false);
@@ -161,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void getUsers() {
 
-        final String userID = FirebaseAuth.getInstance().getUid();
+//        final String userID = FirebaseAuth.getInstance().getUid();
 
         myRef = FirebaseDatabase.getInstance().getReference().child("users");
 
@@ -171,8 +179,11 @@ public class MainActivity extends AppCompatActivity {
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                    User user = new User(userName, firstName, lastName, location);
+                    User user = new User(userId, userName, firstName, lastName, location, ideaTitle, ideaContext, ideaCount);
 
+                    if (snapshot.child("id").exists()) {
+                        user.setUserID(snapshot.child("id").getValue().toString());
+                    }
                     if (snapshot.child("userName").exists()) {
                         user.setUserName(snapshot.child("userName").getValue().toString());
                     }
@@ -185,9 +196,32 @@ public class MainActivity extends AppCompatActivity {
                     if (snapshot.child("location").exists()) {
                         user.setLocation(snapshot.child("location").getValue().toString());
                     }
+                    if (snapshot.child("ideas").exists()) {
+
+                        long ideaCount = snapshot.child("ideas").getChildrenCount();
+                        user.setIdeaCount(String.valueOf(ideaCount));
+
+                        for (DataSnapshot snap : snapshot.child("ideas").getChildren()) {
+
+                            if (snap.child("ideaTitle").exists()) {
+                                user.setIdeaTitle(snap.child("ideaTitle").getValue().toString());
+                            }
+                            if (snap.child("ideaContext").exists()) {
+                                user.setIdeaContext(snap.child("ideaContext").getValue().toString());
+                            }
+                            if (snap.child("ideaContent").exists()) {
+                                user.setIdeaContent(snap.child("ideaContent").getValue().toString());
+                            }
+                            if (snap.child("modifiedDate").exists()) {
+                                user.setCreatedDate(snap.child("modifiedDate").getValue().toString());
+                            }
+                        }
+                    }
 
                     userList.add(user);
                     mAdapter.notifyDataSetChanged();
+
+//                    Log.d(TAG, "IDEA TITLE: " + user.getIdeaTitle());
                 }
             }
             @Override

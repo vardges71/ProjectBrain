@@ -14,6 +14,7 @@ import java.util.List;
 public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder> {
 
     private List<User> userList;
+//    private List<Idea> ideaList;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -21,6 +22,8 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
         public TextView name;
         public TextView location;
         public TextView lastPostedLbl;
+        public TextView ideaTitle;
+        public TextView ideaContext;
 
         public ViewHolder(@NonNull View customView) {
             super(customView);
@@ -29,6 +32,8 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
             lastPostedLbl = (TextView) customView.findViewById(R.id.lastPostedLbl);
             name = (TextView) customView.findViewById(R.id.name);
             location = (TextView) customView.findViewById(R.id.location);
+            ideaTitle = (TextView) customView.findViewById(R.id.ideasTitleTV);
+            ideaContext = (TextView) customView.findViewById(R.id.ideasContextTV);
         }
     }
 
@@ -54,6 +59,8 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
         holder.lastPostedLbl.setText("Last posted");
         holder.name.setText(user.getFirstName() + " " + user.getLastName() + " |");
         holder.location.setText(" " + user.getLocation());
+        holder.ideaTitle.setText(user.getIdeaTitle());
+        holder.ideaContext.setText(user.getIdeaContext());
     }
 
     @Override

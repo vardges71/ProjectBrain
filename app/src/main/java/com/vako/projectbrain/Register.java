@@ -129,6 +129,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
 
         myRef = FirebaseDatabase.getInstance().getReference().child("users").child(userID);
 
+        myRef.child("id").setValue(userID);
         myRef.child("email").setValue(currentEmail);
         myRef.child("userName").setValue(userName);
 
