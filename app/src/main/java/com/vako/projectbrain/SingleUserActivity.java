@@ -23,6 +23,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ import java.util.List;
 public class SingleUserActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
-    DatabaseReference myRef;
+    Query myRef;
 
     private List<User> ideaList = new ArrayList<>();
     private RecyclerView recyclerView;
@@ -82,9 +83,17 @@ public class SingleUserActivity extends AppCompatActivity {
             @Override
             public void onClick(View view, int position) {
 
-                User idea = ideaList.get(position);
-//                Intent intent = new Intent(SingleUserActivity.this, SingleUserActivity.class);
-//                startActivity(intent);
+                User clickedIdea = ideaList.get(position);
+                Intent intent = new Intent(SingleUserActivity.this, SingleIdeaActivity.class);
+
+                intent.putExtra("firstName", clickedIdea.getFirstName());
+                intent.putExtra("lastName", clickedIdea.getLastName());
+                intent.putExtra("ideaCount", clickedIdea.getIdeaCount());
+                intent.putExtra("ideaTitle", clickedIdea.getIdeaTitle());
+                intent.putExtra("ideaContext", clickedIdea.getIdeaContext());
+                intent.putExtra("ideaContent", clickedIdea.getIdeaContent());
+                intent.putExtra("ideaModDate", clickedIdea.getCreatedDate());
+                startActivity(intent);
             }
 
             @Override
@@ -113,13 +122,8 @@ public class SingleUserActivity extends AppCompatActivity {
         MenuItem editButton = menu.findItem(R.id.editUser);
         editButton.setVisible(false);
 
-        // Associate searchable configuration with the SearchView
-//        SearchManager searchManager =
-//                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-//        SearchView searchView =
-//                (SearchView) menu.findItem(R.id.search_icon).getActionView();
-//        searchView.setSearchableInfo(
-//                searchManager.getSearchableInfo(getComponentName()));
+        MenuItem searchButton = menu.findItem(R.id.search_icon);
+        searchButton.setVisible(true);
 
         return true;
     }
@@ -145,9 +149,10 @@ public class SingleUserActivity extends AppCompatActivity {
             case R.id.logout_icon:
                 logOut();
                 return true;
-//            case R.id.search_icon:
-//
-//                return true;
+            case R.id.search_icon:
+                Intent toSearch = new Intent(this, SearchActivity.class);
+                startActivity(toSearch);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -173,7 +178,7 @@ public class SingleUserActivity extends AppCompatActivity {
 
         final String clickedUserID = extras.getString("clickedUserID");
 
-        myRef = FirebaseDatabase.getInstance().getReference().child("users");
+        myRef = FirebaseDatabase.getInstance().getReference().child("users").orderByKey().equalTo(clickedUserID);
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override

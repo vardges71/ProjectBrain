@@ -95,6 +95,9 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
         MenuItem userButton = menu.findItem(R.id.userMenu);
         userButton.setVisible(false);
 
+        MenuItem searchButton = menu.findItem(R.id.search_icon);
+        searchButton.setVisible(true);
+
 //        MenuItem searchButton = menu.findItem(R.id.search_icon);
 //        searchButton.setVisible(false);
 
@@ -121,9 +124,10 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
             case R.id.logout_icon:
                 logOut();
                 return true;
-//            case R.id.search_icon:
-//                searchUsers();
-//                return true;
+            case R.id.search_icon:
+                Intent toSearch = new Intent(this, SearchActivity.class);
+                startActivity(toSearch);
+                return true;
             case R.id.editUser:
                 userNameET.setEnabled(true);
                 firstNameET.setEnabled(true);

@@ -152,6 +152,10 @@ public class MainActivity extends AppCompatActivity {
                 Intent toWriteIdea = new Intent(this, WriteIdeaActivity.class);
                 startActivity(toWriteIdea);
                 return true;
+            case R.id.search_icon:
+                Intent toSearch = new Intent(this, SearchActivity.class);
+                startActivity(toSearch);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

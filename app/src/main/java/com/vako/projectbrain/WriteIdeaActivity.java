@@ -71,7 +71,7 @@ public class WriteIdeaActivity extends AppCompatActivity implements View.OnClick
         ideaButton.setVisible(false);
 
         MenuItem searchButton = menu.findItem(R.id.search_icon);
-        searchButton.setVisible(false);
+        searchButton.setVisible(true);
 
         MenuItem editButton = menu.findItem(R.id.editUser);
         editButton.setVisible(true);
@@ -107,9 +107,10 @@ public class WriteIdeaActivity extends AppCompatActivity implements View.OnClick
                 contextET.setEnabled(true);
                 contentET.setEnabled(true);
                 return true;
-//            case R.id.search_icon:
-//                searchUsers();
-//                return true;
+            case R.id.search_icon:
+                Intent toSearch = new Intent(this, SearchActivity.class);
+                startActivity(toSearch);
+                return true;
         }
         return false;
     }
