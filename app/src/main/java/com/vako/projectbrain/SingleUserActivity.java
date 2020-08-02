@@ -304,7 +304,6 @@ public class SingleUserActivity extends AppCompatActivity implements View.OnClic
 
     private void checkIfFavorite() {
 
-//        Query ref;
         mAuth = FirebaseAuth.getInstance();
         String userID = mAuth.getCurrentUser().getUid();
         Bundle extras = getIntent().getExtras();
@@ -325,7 +324,6 @@ public class SingleUserActivity extends AppCompatActivity implements View.OnClic
 
                     Log.d("THE USER HAVE NOT", "DE HIMA INCH ANENQ VOR QEZ CHEN HAVANEL");
                 }
-
             }
 
             @Override
