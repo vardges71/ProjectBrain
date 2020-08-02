@@ -44,6 +44,8 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     private String firstName = "name";
     private String lastName = "surname";
     private String location = "location";
+
+    private String ideaID = "";
     private String ideaTitle = "";
     private String ideaContext = "";
     private String ideaCount = "";
@@ -206,7 +208,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
         } else {
 
-            final User user = new User(userId, userName, firstName, lastName, location, ideaTitle, ideaContext, ideaCount);
+            final User user = new User(userId, userName, firstName, lastName, location, ideaID, ideaTitle, ideaContext, ideaCount);
 
             String firstLetterCapital = query.substring(0, 1).toUpperCase() + query.substring(1);
             Query eventSearchQuery = ref.orderByChild("userName").startAt(firstLetterCapital).endAt(firstLetterCapital + "uf8ff");

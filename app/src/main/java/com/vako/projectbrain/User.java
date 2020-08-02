@@ -8,6 +8,8 @@ public class User {
     private String firstName;
     private String lastName;
     private String location;
+
+    private String ideaID;
     private String ideaTitle;
     private String ideaContext;
     private String ideaContent;
@@ -51,13 +53,14 @@ public class User {
         this.location = location;
     }
 
-    public User(String userID, String userName, String firstName, String lastName, String location, String ideaTitle, String ideaContext, String ideaCount) {
+    public User(String userID, String userName, String firstName, String lastName, String location, String ideaID, String ideaTitle, String ideaContext, String ideaCount) {
 
         this.userID = userID;
         this.userName = userName;
         this.firstName = firstName;
         this.lastName = lastName;
         this.location = location;
+        this.ideaID = ideaID;
         this.ideaTitle = ideaTitle;
         this.ideaContext = ideaContext;
         this.ideaCount = ideaCount;
@@ -104,6 +107,8 @@ public class User {
     public String getIdeaCount() { return ideaCount; }
     public void setIdeaCount(String ideaCount) { this.ideaCount = ideaCount; }
 
+    public String getIdeaID() { return ideaID; }
+    public void setIdeaID(String ideaID) { this.ideaID = ideaID; }
 
     @Override
     public String toString() {
@@ -114,6 +119,7 @@ public class User {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", location='" + location + '\'' +
+                ", ideaID='" + ideaID + '\'' +
                 ", ideaTitle='" + ideaTitle + '\'' +
                 ", ideaContext='" + ideaContext + '\'' +
                 ", ideaContent='" + ideaContent + '\'' +

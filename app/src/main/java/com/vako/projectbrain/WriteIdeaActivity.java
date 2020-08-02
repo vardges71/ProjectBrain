@@ -156,6 +156,7 @@ public class WriteIdeaActivity extends AppCompatActivity implements View.OnClick
 
         myRef = FirebaseDatabase.getInstance().getReference().child("users").child(userID).child("ideas").child(ideaId);
 
+        myRef.child("ideaID").setValue(ideaId);
         myRef.child("modifiedDate").setValue(currentDate);
         myRef.child("ideaTitle").setValue(ideaTitle);
         myRef.child("ideaContext").setValue(ideaContext);

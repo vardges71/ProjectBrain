@@ -11,7 +11,7 @@
         android:id="@+id/topView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintHeight_percent="0.125"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:padding="16dp">
@@ -43,6 +43,16 @@
             android:textColor="@color/barColor"
             android:textStyle="italic"
             android:text="TextView" />
+
+        <ImageButton
+            android:id="@+id/followButton"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            app:layout_constraintEnd_toEndOf="@id/topView"
+            app:layout_constraintBottom_toBottomOf="@id/topView"
+            app:srcCompat="@drawable/ic_star"
+            android:layout_marginTop="5dp"
+            android:background="@color/transparent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -78,7 +88,7 @@
         android:id="@+id/bottomView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.7"
+        app:layout_constraintHeight_percent="0.66"
         app:layout_constraintTop_toBottomOf="@id/middleView"
         app:layout_constraintStart_toStartOf="parent"
         android:padding="16dp">

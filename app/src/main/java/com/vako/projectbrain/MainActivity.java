@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
     private String firstName = "name";
     private String lastName = "surname";
     private String location = "location";
+
+    private String ideaID = "";
     private String ideaTitle = "";
     private String ideaContext = "";
     private String ideaCount = "";
@@ -121,14 +123,6 @@ public class MainActivity extends AppCompatActivity {
         MenuItem editButton = menu.findItem(R.id.editUser);
         editButton.setVisible(false);
 
-//        // Associate searchable configuration with the SearchView
-//        SearchManager searchManager =
-//                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-//        SearchView searchView =
-//                (SearchView) menu.findItem(R.id.search_icon).getActionView();
-//        searchView.setSearchableInfo(
-//                searchManager.getSearchableInfo(getComponentName()));
-
         return true;
     }
 
@@ -184,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                    User user = new User(userId, userName, firstName, lastName, location, ideaTitle, ideaContext, ideaCount);
+                    User user = new User(userId, userName, firstName, lastName, location, ideaID, ideaTitle, ideaContext, ideaCount);
 
                     if (snapshot.child("id").exists()) {
                         user.setUserID(snapshot.child("id").getValue().toString());

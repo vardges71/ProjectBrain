@@ -45,12 +45,14 @@ public class SingleUserActivity extends AppCompatActivity implements View.OnClic
     TextView singleUserName, singleUserFullName, singleUserLocation, singleUserIdeasNumberResult;
     ImageButton followButton;
 
-    private String id;
+    String userID;
     private String email;
     private String userName;
     private String firstName = "name";
     private String lastName = "surname";
     private String location = "location";
+
+    private String ideaID = "";
     private String ideaTitle = "";
     private String ideaContext = "";
     private String ideaCount = "";
@@ -92,12 +94,17 @@ public class SingleUserActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onClick(View view, int position) {
 
+                final Bundle extras = getIntent().getExtras();
+                String userFullName = (extras.getString("userFirstName")) + " " + (extras.getString("userLastName"));
+                String clickedUserID = extras.getString("clickedUserID");
+
                 User clickedIdea = ideaList.get(position);
                 Intent intent = new Intent(SingleUserActivity.this, SingleIdeaActivity.class);
 
-                intent.putExtra("firstName", clickedIdea.getFirstName());
-                intent.putExtra("lastName", clickedIdea.getLastName());
+                intent.putExtra("clickedUserID", clickedUserID);
+                intent.putExtra("userFullName", userFullName);
                 intent.putExtra("ideaCount", clickedIdea.getIdeaCount());
+                intent.putExtra("ideaID", clickedIdea.getIdeaID());
                 intent.putExtra("ideaTitle", clickedIdea.getIdeaTitle());
                 intent.putExtra("ideaContext", clickedIdea.getIdeaContext());
                 intent.putExtra("ideaContent", clickedIdea.getIdeaContent());
@@ -201,8 +208,11 @@ public class SingleUserActivity extends AppCompatActivity implements View.OnClic
 
                         for (DataSnapshot snap : snapshot.child("ideas").getChildren()) {
 
-                            User idea = new User(ideaTitle, ideaContext, modifiedDate);
+                            User idea = new User(userID, userName, firstName, lastName, location, ideaID, ideaTitle, ideaContext, ideaCount);
 
+                            if (snap.child("ideaID").exists()) {
+                                idea.setIdeaID(snap.child("ideaID").getValue().toString());
+                            }
                             if (snap.child("ideaTitle").exists()) {
                                 idea.setIdeaTitle(snap.child("ideaTitle").getValue().toString());
                             }
@@ -268,7 +278,7 @@ public class SingleUserActivity extends AppCompatActivity implements View.OnClic
         final String clickedUserID = extras.getString("clickedUserID");
 
         AlertDialog alertDialog = new AlertDialog.Builder(this)
-                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setIcon(R.drawable.ic_warning)
                 .setTitle("Are you sure to Unfollow User?")
                 .setMessage("The user will be deleted from your favorites")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -299,7 +309,6 @@ public class SingleUserActivity extends AppCompatActivity implements View.OnClic
         String userID = mAuth.getCurrentUser().getUid();
         Bundle extras = getIntent().getExtras();
         final String clickedUserID = extras.getString("clickedUserID");
-        final String favoriteUserName = extras.getString("userName");
 
         reference = FirebaseDatabase.getInstance().getReference().child("users").child(userID).child("favorites");
 
