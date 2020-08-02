@@ -1,8 +1,10 @@
 package com.vako.projectbrain;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -237,24 +239,44 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
 
     public void deleteUser() {
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        user.delete()
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "User account deleted.");
-                            Intent backToLogIn = new Intent(Profile.this, LogIn.class);
-                            startActivity(backToLogIn);
-                        }
-                    }
-                });
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+            .setIcon(R.drawable.ic_warning)
+            .setTitle("Are you sure to DELETE this Account?")
+            .setMessage("You will not have access to this account anymore")
+            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
 
-        myRef = FirebaseDatabase.getInstance().getReference();
-        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        myRef.child("users").child(userID).removeValue();
+                    user.delete()
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Log.d(TAG, "User account deleted.");
+                                Intent backToLogIn = new Intent(Profile.this, LogIn.class);
+                                startActivity(backToLogIn);
+                            }
+                            }
+                        });
 
-        Toast.makeText(Profile.this, "Account successfuly deleted", Toast.LENGTH_LONG).show();
+                    myRef = FirebaseDatabase.getInstance().getReference();
+                    String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    myRef.child("users").child(userID).removeValue();
+
+                    Toast.makeText(Profile.this, "Account successfuly deleted", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"The user unfollow",Toast.LENGTH_LONG).show();
+                }
+            })
+
+            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+//                        Toast.makeText(getApplicationContext(),"Nothing Happened",Toast.LENGTH_LONG).show();
+                }
+            })
+        .show();
     }
 }

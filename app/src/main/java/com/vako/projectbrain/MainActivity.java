@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, SingleUserActivity.class);
 
                 intent.putExtra("clickedUserID", clickedUser.getUserID());
+                intent.putExtra("userId", clickedUser.getUserID());
                 intent.putExtra("userName", clickedUser.getUserName());
                 intent.putExtra("userFirstName", clickedUser.getFirstName());
                 intent.putExtra("userLastName", clickedUser.getLastName());

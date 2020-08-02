@@ -1,13 +1,13 @@
 package com.vako.projectbrain;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.SearchManager;
-import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,8 +15,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.SearchView;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -29,16 +30,20 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SingleUserActivity extends AppCompatActivity {
+public class SingleUserActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final String TAG = "SingleUserActivity";
     FirebaseAuth mAuth;
-    Query myRef;
+    DatabaseReference reference;
 
     private List<User> ideaList = new ArrayList<>();
     private RecyclerView recyclerView;
     private IdeasListAdapter lAdapter;
 
+    private int buttonState = 1;
+
     TextView singleUserName, singleUserFullName, singleUserLocation, singleUserIdeasNumberResult;
+    ImageButton followButton;
 
     private String id;
     private String email;
@@ -59,12 +64,13 @@ public class SingleUserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_user);
 
+        checkIfFavorite();
         initialize();
     }
 
     public void initialize() {
 
-        recyclerView = (RecyclerView) findViewById(R.id.ideasList);
+        recyclerView = findViewById(R.id.ideasList);
         lAdapter = new IdeasListAdapter(ideaList);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -75,6 +81,9 @@ public class SingleUserActivity extends AppCompatActivity {
         singleUserFullName = findViewById(R.id.singleUserFullName);
         singleUserLocation = findViewById(R.id.singleUserLocation);
         singleUserIdeasNumberResult = findViewById(R.id.singleUserIdeasNumberResult);
+
+        followButton = findViewById(R.id.followButton);
+        followButton.setOnClickListener(this);
 
         recyclerView.setAdapter(lAdapter);
 
@@ -111,7 +120,7 @@ public class SingleUserActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
 
         MenuInflater inflater = getMenuInflater();
-        ((MenuInflater) inflater).inflate(R.menu.main_menu, menu);
+        inflater.inflate(R.menu.main_menu, menu);
 
         MenuItem mainButton = menu.findItem(R.id.mainActtivity);
         mainButton.setVisible(true);
@@ -170,6 +179,8 @@ public class SingleUserActivity extends AppCompatActivity {
 
     private void getUser() {
 
+        Query myRef;
+
         final Bundle extras = getIntent().getExtras();
         singleUserName.setText(extras.getString("userName"));
         singleUserFullName.setText(extras.getString("userFirstName") + " " + extras.getString("userLastName"));
@@ -218,15 +229,100 @@ public class SingleUserActivity extends AppCompatActivity {
 
             }
         });
-//        User idea = new User(ideaTitle, ideaContext, modifiedDate);
-//        idea.setIdeaTitle(extras.getString("ideaTitle"));
-//        idea.setIdeaContext(extras.getString("ideaContext"));
-//        idea.setIdeaContent(extras.getString("ideaContent"));
-//        idea.setIdeaCount(extras.getString("ideaModDate"));
-//
-//        ideaList.add(idea);
-//        lAdapter.notifyDataSetChanged();
 
         Log.d("ATENNTION", "USER DETAIS: " + singleUserFullName);
+    }
+
+    @Override
+    public void onClick(View view) {
+
+        if(buttonState % 2 == 0) {
+            unfollowUser();
+        } else {
+            followUser();
+        }
+        buttonState++;
+    }
+
+    private void followUser() {
+
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        final Bundle extras = getIntent().getExtras();
+        String username = extras.getString("userName");
+        String clickedUserID = extras.getString("clickedUserID");
+
+        reference = FirebaseDatabase.getInstance().getReference().child("users").child(userID).child("favorites").child(clickedUserID);
+        reference.child("username").setValue(username);
+        reference.child("favoriteID").setValue(clickedUserID);
+
+        followButton.setImageResource(R.drawable.ic_star_filled);
+    }
+
+    private void unfollowUser() {
+
+        final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        final Bundle extras = getIntent().getExtras();
+        String username = extras.getString("userName");
+        final String clickedUserID = extras.getString("clickedUserID");
+
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Are you sure to Unfollow User?")
+                .setMessage("The user will be deleted from your favorites")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //set what would happen when positive button is clicked
+                        reference = FirebaseDatabase.getInstance().getReference().child("users").child(userID).child("favorites").child(clickedUserID);
+                        reference.removeValue();
+                        followButton.setImageResource(R.drawable.ic_star);
+                        Toast.makeText(getApplicationContext(),"The user unfollow",Toast.LENGTH_LONG).show();
+                    }
+                })
+
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+//                        Toast.makeText(getApplicationContext(),"Nothing Happened",Toast.LENGTH_LONG).show();
+                    }
+                })
+                .show();
+    }
+
+    private void checkIfFavorite() {
+
+//        Query ref;
+        mAuth = FirebaseAuth.getInstance();
+        String userID = mAuth.getCurrentUser().getUid();
+        Bundle extras = getIntent().getExtras();
+        final String clickedUserID = extras.getString("clickedUserID");
+        final String favoriteUserName = extras.getString("userName");
+
+        reference = FirebaseDatabase.getInstance().getReference().child("users").child(userID).child("favorites");
+
+        reference.orderByChild("favoriteID").equalTo(clickedUserID).addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                if(snapshot.exists()) {
+
+                    followButton.setImageResource(R.drawable.ic_star_filled);
+                    Log.d("THE USER HAVE FAVORITES", snapshot.child("favorites").getKey());
+                } else {
+
+                    Log.d("THE USER HAVE NOT", "DE HIMA INCH ANENQ VOR QEZ CHEN HAVANEL");
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }
