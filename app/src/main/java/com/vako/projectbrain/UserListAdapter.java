@@ -14,7 +14,6 @@ import java.util.List;
 public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder> {
 
     private List<User> userList;
-//    private List<Idea> ideaList;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
